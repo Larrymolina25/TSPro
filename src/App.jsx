@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
-import { Auth, Index } from './pages'
+import { Auth, Dashboard, Index } from './pages'
 
 const App = () => {
   return (
@@ -9,6 +9,10 @@ const App = () => {
           path='/'
           element={<Index />}
         />
+        <Route
+          path='/dashboard'
+          element={<Dashboard />}
+        ></Route>
         {/* <Route path="/" element={<Index />} /> <Route path="/dashboard" element={<Dashboard />}> <Route path="users" element={<Users />} />
             <Route path="surveys" element={<Surveys />} />
           </Route>

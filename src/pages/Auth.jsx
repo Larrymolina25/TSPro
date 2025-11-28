@@ -1,53 +1,84 @@
-// Importamos React y el hook useState para manejar estados
 import { useState } from 'react'
 
-// Importamos iconos desde lucide-react
 import { Building2, Mail, Lock, User, Hash, Users } from 'lucide-react'
+import { v4 as uuid } from 'uuid'
+
+import { useAppStore } from '../lib/store/zustandStore'
+import { useNavigate } from 'react-router-dom'
 
 const Auth = () => {
+  const navigate = useNavigate()
+  const users = useAppStore((state) => state.users)
+  const addCompany = useAppStore((state) => state.addCompany)
+  const addUser = useAppStore((state) => state.addUser)
+
   // TAB ACTIVO (usuarios o empresas)
   const [activeTab, setActiveTab] = useState('usuarios')
 
   // ESTADO para el formulario de usuarios
   const [usuariosData, setUsuariosData] = useState({
-    empresa: '',
-    identificacion: '',
     correo: '',
     password: '',
   })
 
   // ESTADO para el formulario de empresas
   const [empresasData, setEmpresasData] = useState({
-    usuario: '',
+    nombreEmpresa: '',
+    correo: '',
     password: '',
+    identificacion: '',
+    admin: '',
   })
 
   // VALIDACIÓN del login de Usuarios
   const handleLoginUsuarios = () => {
-    // Verifica que todos los campos estén llenos
-    if (
-      usuariosData.empresa &&
-      usuariosData.identificacion &&
-      usuariosData.correo &&
-      usuariosData.password
-    ) {
-      alert('✓ Login de Usuario exitoso')
-      console.log('Datos Usuario:', usuariosData)
-      // Aquí podrías redireccionar: navigate('/dashboard-usuarios')
-    } else {
+    if (!usuariosData.correo || !usuariosData.password) {
       alert('⚠ Por favor completa todos los campos')
+      return
     }
+
+    const currentUser = users?.find(
+      (user) => user?.correo === usuariosData?.correo && user?.password === usuariosData?.password
+    )
+
+    if (!currentUser || !currentUser?.active) {
+      alert('⚠ Usuario o contraseña incorrectos, o usuario inactivo')
+      return
+    }
+
+    alert('✓ Login de Usuario exitoso')
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
+    navigate('/dashboard')
   }
 
   // VALIDACIÓN del login de Empresas
   const handleLoginEmpresas = () => {
-    if (empresasData.usuario && empresasData.password) {
-      alert('✓ Login de Empresa exitoso')
-      console.log('Datos Empresa:', empresasData)
-      // Aquí podrías redireccionar: navigate('/dashboard-empresas')
-    } else {
+    if (
+      !empresasData.correo ||
+      !empresasData.password ||
+      !empresasData.nombreEmpresa ||
+      !empresasData.identificacion ||
+      !empresasData.admin
+    ) {
       alert('⚠ Por favor completa todos los campos')
+      return
     }
+
+    addCompany({ id: empresasData.identificacion, nombreEmpresa: empresasData.nombreEmpresa })
+    const currentUser = {
+      id: uuid(),
+      correo: empresasData.correo,
+      nombre: empresasData.admin,
+      password: empresasData.password,
+      idCompany: empresasData.identificacion,
+      active: true,
+      isAdmin: true,
+    }
+    addUser(currentUser)
+
+    alert('✓ Empresa creada exitosamente')
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
+    navigate('/dashboard')
   }
 
   return (
@@ -110,58 +141,6 @@ const Auth = () => {
                   <p className='text-purple-200 text-sm'>Completa tus datos para ingresar</p>
                 </div>
 
-                {/* Campo: Empresa */}
-                <div className='space-y-2'>
-                  <label
-                    htmlFor='empresa'
-                    className='block text-sm font-medium text-white'
-                  >
-                    Nombre de Empresa
-                  </label>
-                  <div className='relative'>
-                    <Building2 className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
-                    <input
-                      id='empresa'
-                      type='text'
-                      placeholder='Ej: TechCorp S.A.S'
-                      value={usuariosData.empresa}
-                      onChange={(e) =>
-                        setUsuariosData({
-                          ...usuariosData,
-                          empresa: e.target.value,
-                        })
-                      }
-                      className='w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white'
-                    />
-                  </div>
-                </div>
-
-                {/* Campo: Identificación */}
-                <div className='space-y-2'>
-                  <label
-                    htmlFor='identificacion'
-                    className='block text-sm font-medium text-white'
-                  >
-                    Identificación
-                  </label>
-                  <div className='relative'>
-                    <Hash className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
-                    <input
-                      id='identificacion'
-                      type='text'
-                      placeholder='Ej: 1234567890'
-                      value={usuariosData.identificacion}
-                      onChange={(e) =>
-                        setUsuariosData({
-                          ...usuariosData,
-                          identificacion: e.target.value,
-                        })
-                      }
-                      className='w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white'
-                    />
-                  </div>
-                </div>
-
                 {/* Campo: Correo */}
                 <div className='space-y-2'>
                   <label
@@ -219,7 +198,7 @@ const Auth = () => {
                   onClick={handleLoginUsuarios}
                   className='w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl font-bold text-lg'
                 >
-                  Iniciar Sesión como Usuario
+                  Iniciar Sesión
                 </button>
               </div>
             )}
@@ -231,29 +210,81 @@ const Auth = () => {
               <div className='space-y-5 animate-fadeIn'>
                 {/* Título */}
                 <div className='text-center mb-6'>
-                  <h2 className='text-2xl font-bold text-white mb-1'>Acceso de Empresas</h2>
+                  <h2 className='text-2xl font-bold text-white mb-1'>Creacion de Empresas</h2>
                   <p className='text-purple-200 text-sm'>Ingresa las credenciales de tu empresa</p>
                 </div>
 
-                {/* Campo: Usuario */}
+                <div className='flex w-full gap-4'>
+                  {/* Campo: Nombre Empresa */}
+                  <div className='space-y-2'>
+                    <label
+                      htmlFor='nombre-empresa'
+                      className='block text-sm font-medium text-white'
+                    >
+                      Nombre Empresa
+                    </label>
+                    <div className='relative'>
+                      <User className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
+                      <input
+                        id='nombre-empresa'
+                        type='text'
+                        placeholder='nombre de la empresa'
+                        value={empresasData.nombreEmpresa}
+                        onChange={(e) =>
+                          setEmpresasData({
+                            ...empresasData,
+                            nombreEmpresa: e.target.value,
+                          })
+                        }
+                        className='w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white'
+                      />
+                    </div>
+                  </div>
+
+                  <div className='space-y-2'>
+                    <label
+                      htmlFor='id-empresa'
+                      className='block text-sm font-medium text-white'
+                    >
+                      Identificacion Empresa
+                    </label>
+                    <div className='relative'>
+                      <Hash className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
+                      <input
+                        id='id-empresa'
+                        type='text'
+                        placeholder='nombre de la empresa'
+                        value={empresasData.identificacion}
+                        onChange={(e) =>
+                          setEmpresasData({
+                            ...empresasData,
+                            identificacion: e.target.value,
+                          })
+                        }
+                        className='w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white'
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className='space-y-2'>
                   <label
-                    htmlFor='usuario-empresa'
+                    htmlFor='correo-empresa'
                     className='block text-sm font-medium text-white'
                   >
-                    Usuario
+                    Correo
                   </label>
                   <div className='relative'>
-                    <User className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
+                    <Mail className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
                     <input
-                      id='usuario-empresa'
-                      type='text'
-                      placeholder='usuario_empresa'
-                      value={empresasData.usuario}
+                      id='correo-empresa'
+                      type='email'
+                      placeholder='nombre@empresa.com'
+                      value={empresasData.correo}
                       onChange={(e) =>
                         setEmpresasData({
                           ...empresasData,
-                          usuario: e.target.value,
+                          correo: e.target.value,
                         })
                       }
                       className='w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white'
@@ -287,19 +318,29 @@ const Auth = () => {
                   </div>
                 </div>
 
-                {/* Checkbox + ¿Olvidaste contraseña? */}
-                <div className='flex items-center justify-between text-sm mt-4'>
-                  <label className='flex items-center text-white cursor-pointer'>
-                    <input
-                      type='checkbox'
-                      className='mr-2 rounded'
-                    />
-                    <span>Recordar sesión</span>
+                <div className='space-y-2'>
+                  <label
+                    htmlFor='admin-empresa'
+                    className='block text-sm font-medium text-white'
+                  >
+                    Administrador
                   </label>
-
-                  <button className='text-purple-300 hover:text-purple-200 font-medium'>
-                    ¿Olvidaste tu contraseña?
-                  </button>
+                  <div className='relative'>
+                    <User className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-300' />
+                    <input
+                      id='admin-empresa'
+                      type='text'
+                      placeholder='Nombre completo del administrador'
+                      value={empresasData.admin}
+                      onChange={(e) =>
+                        setEmpresasData({
+                          ...empresasData,
+                          admin: e.target.value,
+                        })
+                      }
+                      className='w-full pl-12 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white'
+                    />
+                  </div>
                 </div>
 
                 {/* BOTÓN enviar */}
@@ -307,18 +348,8 @@ const Auth = () => {
                   onClick={handleLoginEmpresas}
                   className='w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold text-lg'
                 >
-                  Iniciar Sesión como Empresa
+                  Crear Empresa
                 </button>
-
-                {/* Registro */}
-                <div className='text-center mt-6'>
-                  <p className='text-purple-200 text-sm'>
-                    ¿No tienes cuenta?{' '}
-                    <button className='text-white font-semibold hover:text-purple-300'>
-                      Regístrate aquí
-                    </button>
-                  </p>
-                </div>
               </div>
             )}
           </div>
@@ -326,7 +357,7 @@ const Auth = () => {
 
         {/* FOOTER */}
         <p className='text-center text-sm text-purple-200 mt-8'>
-          Sistema seguro de autenticación • © 2024
+          Sistema seguro de autenticación • © 2025
         </p>
       </div>
 
