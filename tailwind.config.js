@@ -69,40 +69,20 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
         "fade-in": {
-          from: {
-            opacity: "0",
-            transform: "translateY(10px)",
-          },
-          to: {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
         "slide-in": {
-          from: {
-            transform: "translateX(-10px)",
-            opacity: "0",
-          },
-          to: {
-            transform: "translateX(0)",
-            opacity: "1",
-          },
+          from: { transform: "translateX(-10px)", opacity: "0" },
+          to: { transform: "translateX(0)", opacity: "1" },
         },
       },
       animation: {
@@ -111,28 +91,9 @@ export default {
         "fade-in": "fade-in 0.4s ease-out",
         "slide-in": "slide-in 0.3s ease-out",
       },
-      //   keyframes: {
-      //     appear: {
-      //       "0%": { opacity: 0 },
-      //       "100%": { opacity: 1 },
-      //     },
-      //     disappear: {
-      //       "0%": { opacity: 1 },
-      //       "100%": { opacity: 0 },
-      //     },
-      //   },
       fontFamily: {
         sans: ["Roboto", "ui-sans-serif", "system-ui"],
       },
     },
-    // screens: {
-    //   xs: "320px",
-    //   sm: "640px",
-    //   md: "768px",
-    //   lg: "1024px",
-    //   xl: "1280px",
-    //   "2xl": "1536px",
-    // },
   },
-  plugins: [require("tailwindcss-animate")],
 };
