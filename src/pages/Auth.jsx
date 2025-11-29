@@ -196,7 +196,7 @@ const Auth = () => {
                 {/* BOTÓN enviar */}
                 <button
                   onClick={handleLoginUsuarios}
-                  className='w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl font-bold text-lg'
+                  className='w-full bg-linear-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl font-bold text-lg'
                 >
                   Iniciar Sesión
                 </button>
@@ -346,7 +346,7 @@ const Auth = () => {
                 {/* BOTÓN enviar */}
                 <button
                   onClick={handleLoginEmpresas}
-                  className='w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold text-lg'
+                  className='w-full bg-linear-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold text-lg'
                 >
                   Crear Empresa
                 </button>
