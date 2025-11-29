@@ -5,6 +5,8 @@ import { Outlet, useNavigate } from 'react-router-dom'
 // import { LogOut, Menu } from 'lucide-react'
 // import { toast } from "sonner";
 import { useEffect } from 'react'
+import { AppSidebar } from '../components'
+import toast from 'react-hot-toast'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -17,14 +19,14 @@ const Dashboard = () => {
   }, [navigate])
 
   const handleLogout = () => {
-    // toast.success('Sesión cerrada')
+    toast.success('Sesión cerrada')
     navigate('/')
   }
 
   return (
     // <SidebarProvider>
     <div className='min-h-screen flex w-full bg-gradient-subtle'>
-      {/* <AppSidebar /> */}
+      <AppSidebar />
       <div className='flex-1 flex flex-col'>
         <header className='sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6 shadow-soft'>
           {/* <SidebarTrigger className='hover:bg-muted transition-smooth'>
