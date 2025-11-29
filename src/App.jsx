@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
-import { Auth, Dashboard, Index } from './pages'
+import { Auth, Dashboard, Index, Users } from './pages'
 import { ToastWrapper } from './layout'
 
 const App = () => {
@@ -15,7 +15,12 @@ const App = () => {
           <Route
             path='/dashboard'
             element={<Dashboard />}
-          ></Route>
+          >
+            <Route
+              path='users'
+              element={<Users />}
+            />
+          </Route>
           {/* <Route path="/" element={<Index />} /> <Route path="/dashboard" element={<Dashboard />}> <Route path="users" element={<Users />} />
             <Route path="surveys" element={<Surveys />} />
           </Route>

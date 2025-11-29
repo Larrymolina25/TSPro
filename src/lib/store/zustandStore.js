@@ -18,7 +18,7 @@ export const useAppStore = create(
       name: 'app-storage',
       partialize: (state) => ({
         // loggedUser: state.loggedUser,
-        usersByCompany: state.usersByCompany,
+        users: state.users,
         companies: state.companies,
         surveysByCompany: state.surveysByCompany,
       }),

@@ -7,6 +7,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { AppSidebar } from '../components'
 import toast from 'react-hot-toast'
+import { Button } from 'antd'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     toast.success('Sesión cerrada')
+    localStorage.removeItem('currentUser')
     navigate('/')
   }
 
@@ -32,6 +34,12 @@ const Dashboard = () => {
           {/* <SidebarTrigger className='hover:bg-muted transition-smooth'>
               <Menu className='w-5 h-5' />
             </SidebarTrigger> */}
+          <Button
+            type='primary'
+            onClick={handleLogout}
+          >
+            Cerrar Sesión
+          </Button>
           {/* <Button
               variant='outline'
               size='sm'

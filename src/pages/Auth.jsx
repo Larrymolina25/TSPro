@@ -1,16 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Building2, Mail, Lock, User, Hash, Users } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
 
 import { useAppStore } from '../lib/store/zustandStore'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Auth = () => {
   const navigate = useNavigate()
   const users = useAppStore((state) => state.users)
   const addCompany = useAppStore((state) => state.addCompany)
   const addUser = useAppStore((state) => state.addUser)
+
+  const currentUser = localStorage.getItem('currentUser')
 
   // TAB ACTIVO (usuarios o empresas)
   const [activeTab, setActiveTab] = useState('usuarios')
@@ -33,7 +36,7 @@ const Auth = () => {
   // VALIDACIÓN del login de Usuarios
   const handleLoginUsuarios = () => {
     if (!usuariosData.correo || !usuariosData.password) {
-      alert('⚠ Por favor completa todos los campos')
+      toast.error('Por favor completa todos los campos')
       return
     }
 
@@ -42,17 +45,17 @@ const Auth = () => {
     )
 
     if (!currentUser || !currentUser?.active) {
-      alert('⚠ Usuario o contraseña incorrectos, o usuario inactivo')
+      toast.error('Usuario o contraseña incorrectos, o usuario inactivo')
       return
     }
 
-    alert('✓ Login de Usuario exitoso')
+    toast.success('Login de Usuario exitoso')
     localStorage.setItem('currentUser', JSON.stringify(currentUser))
     navigate('/dashboard')
   }
 
   // VALIDACIÓN del login de Empresas
-  const handleLoginEmpresas = () => {
+  const handleLoginEmpresas = async () => {
     if (
       !empresasData.correo ||
       !empresasData.password ||
@@ -60,11 +63,11 @@ const Auth = () => {
       !empresasData.identificacion ||
       !empresasData.admin
     ) {
-      alert('⚠ Por favor completa todos los campos')
+      toast.error('Por favor completa todos los campos')
       return
     }
 
-    addCompany({ id: empresasData.identificacion, nombreEmpresa: empresasData.nombreEmpresa })
+    await addCompany({ id: empresasData.identificacion, nombreEmpresa: empresasData.nombreEmpresa })
     const currentUser = {
       id: uuid(),
       correo: empresasData.correo,
@@ -74,12 +77,19 @@ const Auth = () => {
       active: true,
       isAdmin: true,
     }
-    addUser(currentUser)
+    // tipos de roles: admin, usuarios, encuestas
+    await addUser(currentUser)
 
-    alert('✓ Empresa creada exitosamente')
+    toast.success('Empresa creada exitosamente')
     localStorage.setItem('currentUser', JSON.stringify(currentUser))
     navigate('/dashboard')
   }
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/dashboard')
+    }
+  }, [currentUser])
 
   return (
     // CONTENEDOR PRINCIPAL (pantalla completa)
