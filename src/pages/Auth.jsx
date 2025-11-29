@@ -67,7 +67,7 @@ const Auth = () => {
       return
     }
 
-    await addCompany({ id: empresasData.identificacion, nombreEmpresa: empresasData.nombreEmpresa })
+    await addCompany({ id: empresasData.identificacion, nombre: empresasData.nombreEmpresa })
     const currentUser = {
       id: uuid(),
       correo: empresasData.correo,
