@@ -1,7 +1,7 @@
 import { Table, Tag, Button } from 'antd'
 import { Pencil } from 'lucide-react'
 
-const UsersTable = ({ users = [], handleEditUser = () => {} }) => {
+const UsersTable = ({ canCreateOrEditUser = false, users = [], handleEditUser = () => {} }) => {
   const columns = [
     {
       title: 'Nombre completo',
@@ -41,6 +41,7 @@ const UsersTable = ({ users = [], handleEditUser = () => {} }) => {
       align: 'center',
       render: (_, record) => (
         <Button
+          disabled={!canCreateOrEditUser}
           onClick={() => handleEditUser(record)}
           icon={<Pencil size={18} />}
         />
@@ -50,6 +51,7 @@ const UsersTable = ({ users = [], handleEditUser = () => {} }) => {
 
   return (
     <Table
+      rowKey='id'
       columns={columns}
       dataSource={users}
       scroll={{ x: 900 }}

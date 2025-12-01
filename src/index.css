@@ -12,9 +12,9 @@ body {
   overflow-x: hidden;
 }
 
-button {
+/* button {
   cursor: pointer !important;
-}
+} */
 
 a {
   text-decoration: none;

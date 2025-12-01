@@ -53,7 +53,6 @@ const AppSidebar = ({ children }) => {
   useEffect(() => {
     const currentCompany = companies.find((c) => c.id === currentUser.idCompany)
     if (currentCompany) {
-      console.log('Current Company:', currentCompany)
       setNameCompany(currentCompany.nombre ?? currentCompany.nombreEmpresa ?? 'Mi Aplicación')
     }
   }, [companies, currentUser.idCompany])

@@ -56,6 +56,8 @@ const Users = () => {
     setSelectedUser(null)
   }
 
+  const canCreateOrEditUser = currentUser?.isAdmin === true || currentUser?.cargo === 'usuarios'
+
   return (
     <div className='space-y-4 animate-fade-in'>
       <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
@@ -66,6 +68,7 @@ const Users = () => {
           <p className='text-muted-foreground'>Gestiona los usuarios y empleados de tu empresa</p>
         </div>
         <Button
+          disabled={!canCreateOrEditUser}
           onClick={() => setModalOpen(true)}
           className='gradient-primary shadow-elegant hover:opacity-90 transition-smooth gap-2 cursor-pointer'
         >
@@ -76,6 +79,7 @@ const Users = () => {
       <article>
         <UsersTable
           users={users}
+          canCreateOrEditUser={canCreateOrEditUser}
           handleEditUser={handleEditUser}
         />
       </article>

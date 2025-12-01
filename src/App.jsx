@@ -25,10 +25,6 @@ const App = () => {
               element={<Surveys />}
             />
           </Route>
-          {/* <Route path="/" element={<Index />} /> <Route path="/dashboard" element={<Dashboard />}> <Route path="users" element={<Users />} />
-            
-          </Route>
-          <Route path="*" element={<NotFound />} />  */}
           <Route
             path='/auth'
             element={<Auth />}

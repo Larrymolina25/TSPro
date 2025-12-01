@@ -4,7 +4,7 @@ const ToastWrapper = () => {
   return (
     <Toaster
       toastOptions={{ duration: 8000 }}
-      position='bottom-left'
+      position='bottom-right'
     >
       {(t) => (
         <ToastBar toast={t}>
