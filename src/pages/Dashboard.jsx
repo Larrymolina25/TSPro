@@ -1,9 +1,14 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { AppSidebar } from '../components'
+import { AppSidebar } from '../layout'
 
 const Dashboard = () => {
   const navigate = useNavigate()
+
+  // TO-DO:
+  // if (!localStorage.getItem('currentUser')) {
+  //   navigate('/auth')
+  // }
 
   useEffect(() => {
     // Redirect to users by default

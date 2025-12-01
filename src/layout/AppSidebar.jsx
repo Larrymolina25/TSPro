@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Layout, Menu, Button } from 'antd'
 import { ChevronLeft, ChevronRight, Users, FileText, LogOut, Home } from 'lucide-react'
 import { useAppStore } from '../lib/store/zustandStore'
@@ -36,7 +36,7 @@ const AppSidebar = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false)
   const [menuSelected, setMenuSelected] = useState(1)
 
-  const currentCompany = companies.find((c) => c.id === currentUser.companyId)
+  const [nameCompany, setNameCompany] = useState('Mi Aplicación')
 
   const siderWidth = 200
 
@@ -49,6 +49,14 @@ const AppSidebar = ({ children }) => {
     navigateTo[e.key] && navigate(navigateTo[e.key])
     setMenuSelected(e.key)
   }
+
+  useEffect(() => {
+    const currentCompany = companies.find((c) => c.id === currentUser.idCompany)
+    if (currentCompany) {
+      console.log('Current Company:', currentCompany)
+      setNameCompany(currentCompany.nombre ?? currentCompany.nombreEmpresa ?? 'Mi Aplicación')
+    }
+  }, [companies, currentUser.idCompany])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -79,8 +87,9 @@ const AppSidebar = ({ children }) => {
             gap: 8,
           }}
         >
+          {/* TO-DO: Cuando se colapse, este texto desaparezca como el Menu */}
           <Home />
-          {currentCompany?.nombre ?? 'Mi Aplicación'}
+          {nameCompany}
         </div>
 
         <Menu
@@ -91,6 +100,13 @@ const AppSidebar = ({ children }) => {
           items={[...menuItems]}
           onClick={handleMenuClick}
         />
+
+        <div className='w-full absolute bottom-0 p-4 border-t border-gray-700'>
+          <p className='text-white'>
+            Usuario: <br></br>
+            {currentUser?.nombre ?? ''}
+          </p>
+        </div>
       </Sider>
 
       <Layout

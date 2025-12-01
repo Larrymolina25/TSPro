@@ -3,8 +3,8 @@ export const createCompaniesSlice = (set) => ({
 
   setCompanies: (companies) => set({ companies }),
 
-  addCompany: (companyId, name) =>
+  addCompany: (newCompany) =>
     set((state) => ({
-      companies: [...state.companies, { companyId, name }],
+      companies: [...state.companies, newCompany],
     })),
 })
