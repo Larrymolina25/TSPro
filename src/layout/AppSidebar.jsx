@@ -32,7 +32,6 @@ const AppSidebar = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
   const navigate = useNavigate()
 
-  // TRATAR DE ACOMODAR PARA QUE QUEDE POR DEFECTO
   const [collapsed, setCollapsed] = useState(false)
   const [menuSelected, setMenuSelected] = useState(1)
 

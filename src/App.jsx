@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router'
-import { Auth, Dashboard, Index, Surveys, Users } from './pages'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Auth, Dashboard, Index, SurveyFormView, Surveys, Users } from './pages'
 import { ToastWrapper } from './layout'
 
 const App = () => {
@@ -23,6 +23,10 @@ const App = () => {
             <Route
               path='surveys'
               element={<Surveys />}
+            />
+            <Route
+              path='preview/:companyId/:id'
+              element={<SurveyFormView />}
             />
           </Route>
           <Route

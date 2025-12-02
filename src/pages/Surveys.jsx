@@ -5,11 +5,14 @@ import { Button } from 'antd'
 import { Plus } from 'lucide-react'
 
 import { SurveyModal, SurveysTable } from '../components'
+import { useNavigate } from 'react-router-dom'
 
 const Surveys = () => {
   const allSurveys = useAppStore((s) => s.surveysByCompany)
   const addSurveyToCompany = useAppStore((s) => s.addSurveyToCompany)
   const updateSurveyInCompany = useAppStore((s) => s.updateSurveyInCompany)
+
+  const navigate = useNavigate()
 
   const [modalOpen, setModalOpen] = useState(false)
   const [editingSurvey, setEditingSurvey] = useState(null)
@@ -55,12 +58,7 @@ const Surveys = () => {
     }
   }
 
-  const handleExcel = (survey) => {
-    console.log('Generar Excel para', survey)
-  }
-  const handlePdf = (survey) => {
-    console.log('Generar PDF para', survey)
-  }
+  const handlePreview = (survey) => navigate(`/dashboard/preview/${idCompany}/${survey?.id}`)
 
   const canCreateOrEditSurveys = storedUser?.isAdmin === true || storedUser?.cargo === 'encuestas'
 
@@ -84,8 +82,7 @@ const Surveys = () => {
       <SurveysTable
         surveys={companySurveys || []}
         onEdit={openEdit}
-        onExcel={handleExcel}
-        onPdf={handlePdf}
+        onPreview={handlePreview}
         canCreateOrEditSurveys={canCreateOrEditSurveys}
       />
 
